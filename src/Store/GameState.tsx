@@ -18,7 +18,6 @@ export default create(subscribeWithSelector((set,get)=>{
         removeFirstLand: () => {
             set((state) => {
                 const updatedLand = state.land.slice(1);
-                console.log("removed");
                 
                 return { land: updatedLand };
             });

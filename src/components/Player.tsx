@@ -4,7 +4,6 @@
   import GameState from '../Store/GameState';
 
   import { useEffect, useRef, useState } from 'react';
-import Level from './Level';
 
   const Player = () => {
       const body = useRef();
@@ -14,19 +13,19 @@ import Level from './Level';
       const setPlayerRef = GameState((state) => state.setPlayerRef);
 
       useEffect(()=>{
-        startGame();
        
         
         setPlayerRef(body.current);
 
-      }, [isGameStarted]);
+      }, []);
 
       
 
     
       useFrame((state, delta) => {
         
-                
+          const playerTranslation = body.current.translation();
+          body.current.setTranslation({x: playerTranslation.x, y: playerTranslation.y, z : 0})
           const { leftward, rightward } = getKeys();
           const impulse = { x: 0, y: 0, z: 0 };
           const impulseStrength = 0.29 * delta;
@@ -35,6 +34,7 @@ import Level from './Level';
               impulse.x += impulseStrength;
               if(!isGameStarted){
                 setIsGameStarted(true)
+                startGame();  
               }
 
           }
@@ -42,20 +42,19 @@ import Level from './Level';
           if (rightward) {
             if(!isGameStarted){
               setIsGameStarted(true)
+              startGame();  
             }
 
               impulse.x -= impulseStrength;
             }
             
             body.current.applyImpulse(impulse);
+
       });
 
       return (
         <>
-        {isGameStarted &&
-        <Level/>
-        }
-          <RigidBody 
+       <RigidBody 
            linearDamping={0.5} 
           angularDamping={0.5} 
           ref={body} 
@@ -64,7 +63,7 @@ import Level from './Level';
             type="dynamic"
             canSleep={false}
             >
-              <mesh>
+              <mesh castShadow>
                   <boxGeometry args={[0.3, 0.3, 0.3]} />
                   <meshNormalMaterial />
               </mesh>
