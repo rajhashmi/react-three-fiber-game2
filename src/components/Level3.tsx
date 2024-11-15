@@ -4,13 +4,12 @@ import GameState from "../Store/GameState";
 import { useFrame } from "@react-three/fiber";
 
 function Level3() {
-  const bodyRef = useRef();
+  const bodyRef = useRef(null);
   const setBlock = GameState((state) => state.setLand);
   const removeBlock = GameState((state) => state.removeFirstLand);
   const blockInfoGetter = GameState((state) => state.getLand);
   const [renderKey, setRenderKey] = useState(1);
   const [blockColor, setBlockColor] = useState("");
-  const [blockSize, setBlockSize] = useState(4);
   const [blockPosition, setBlockPosition] = useState(8);
 
   useEffect(() => {
@@ -59,7 +58,7 @@ function Level3() {
         position={[0, -2.25, blockPosition]}
       >
         <mesh receiveShadow>
-          <boxGeometry args={[blockSize, 0.5, 4]} />
+          <boxGeometry args={[4, 0.5, 4]} />
           <meshStandardMaterial color={blockColor} />
         </mesh>
       </RigidBody>

@@ -1,27 +1,25 @@
-import { RigidBody } from '@react-three/rapier'
-import React, { useEffect, useRef, useState } from 'react'
+import { RigidBody } from '@react-three/rapier';
+import { useEffect, useRef, useState } from 'react';
 import GameState from '../Store/GameState';
 import { useFrame } from '@react-three/fiber';
 
 function Level1() {
-  const bodyRef = useRef();
-  const setBlock = GameState((state)=> state.setLand)
+  const bodyRef = useRef(null);
+  const setBlock = GameState((state) => state.setLand);
   const removeBlock = GameState((state) => state.removeFirstLand);
   const blockInfoGetter = GameState((state) => state.getLand);
   const [renderKey, setRenderKey] = useState(1);
   const [blockColor, setBlockColor] = useState("");
-  const [blockSize, setBlockSize] = useState(4);
   const [blockPosition, setBlockPosition] = useState(0);
-
-  useEffect(()=>{
-    if(bodyRef.current){
-      removeBlock()
-      setBlock(bodyRef.current)
+  
+  useEffect(() => {
+    if (bodyRef.current) {
+      removeBlock();
+      setBlock(bodyRef.current);
     }
   }, [renderKey]);
 
   const getRandomColor = () => {
-    // Generate a random RGB color
     const r = Math.floor(Math.random() * 256);
     const g = Math.floor(Math.random() * 256);
     const b = Math.floor(Math.random() * 256);
@@ -31,30 +29,30 @@ function Level1() {
   const changeBlock = () => {
     const blockInfo = blockInfoGetter();
     const lastBlockPosition = blockInfo[blockInfo.length - 1]?.translation()?.z || 0;
-    
-    setBlockPosition(lastBlockPosition +  3.58);
-    setBlockColor(getRandomColor());
 
+    setBlockPosition(lastBlockPosition + 3.58);
+    setBlockColor(getRandomColor());
   };
+
   useFrame(() => {
     if (bodyRef.current) {
-      const bodyPosition = bodyRef.current.translation();
+      const bodyPosition = bodyRef.current.translation(); // Corrected usage
       if (bodyPosition.z < -5) {
-       console.log("please remove this ");
-       changeBlock();
-       setRenderKey((prev) => prev + 1);
+        console.log("please remove this ");
+        changeBlock();
+        setRenderKey((prev) => prev + 1);
       }
     }
   });
 
   return (
-    <RigidBody key={renderKey} ref={bodyRef} position={[0,-2.25,blockPosition]}>
-    <mesh receiveShadow>
-        <boxGeometry args={[blockSize,0.5,4]}/>
-        <meshStandardMaterial color={blockColor}/>
-    </mesh>
+    <RigidBody key={renderKey} ref={bodyRef} position={[0, -2.25, blockPosition]}>
+      <mesh receiveShadow>
+        <boxGeometry args={[4, 0.5, 4]} />
+        <meshStandardMaterial color={blockColor} />
+      </mesh>
     </RigidBody>
-  )
+  );
 }
 
-export default Level1
+export default Level1;

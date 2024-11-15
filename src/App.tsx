@@ -1,6 +1,5 @@
 import './App.css';
 import { useFrame } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
 import { Physics } from '@react-three/rapier';
 import CustomCollider from './components/CustomColider';
 import Player from './components/Player';
@@ -13,8 +12,7 @@ import { useState } from 'react';
 
 function App() {
   const [isGameStarted, setIsGameStarted] = useState(false);
-  const gamePhase = GameState((state) => state.phase);
-
+  const gamePhase = GameState((state):string => state.phase);
   useFrame(() => {
     if (gamePhase === 'playing') {
       setIsGameStarted(true);
@@ -36,8 +34,8 @@ function App() {
           shadow-mapSize-width={1024}
           shadow-mapSize-height={1024}
         />
+      
         
-        <OrbitControls />
         <Physics>
           <CustomCollider />
           {isGameStarted && (
@@ -53,6 +51,7 @@ function App() {
           <planeGeometry args={[10, 10, 10]} />
           <meshNormalMaterial />
         </mesh>
+      
       </KeyboardControls>
     </>
   );
